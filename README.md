@@ -9,7 +9,7 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 |-| calculate f(s1,q)/f(s2,q) for degenerate cases| | |
 |-| find out how degenerate cases were treated in Suzuki paper| | |
 |x| find and download raw S(s, q) data from Suzuki+16|RP| |
-|x| plot S(s, q), i.e., fig 6 from paper|Marcin| |
+|*| plot S(s, q), i.e., fig 6 from paper|Marcin| |
 |-| implement function calculating N\_exp| | |
 
 Status (- nothing done, * in progress, x done)
