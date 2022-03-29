@@ -1,8 +1,0 @@
-To do:
-
-Status	Task											Person
-- 		add papers used in Suzuki	
-- 		calculate f(s1,q)/f(s2/q) for degenerate cases		
-- 		evaluate how degenerate cases were treated in Suzuki paper	
-
-Status (- nothing done, * in progress, x done)
