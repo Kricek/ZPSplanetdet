@@ -1,16 +1,17 @@
 # ZPSplanetdet
 Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów magisterskich na Wydziale Fizyki UW. 
 
-## TO DO
+# TO DO
 
-| Status | Task | Person | Note |
-|--------|------|--------|------|
-|*| add papers used in Suzuki| Pawel | MOA-2012-BLG-355 paper missing |
+| Status | Task | Person | Notes |
+|--------|------|--------|-------|
+|x| add papers used in Suzuki| Pawel | MOA-2012-BLG-355 paper missing |
 |*| calculate f(s1,q)/f(s2,q) for degenerate cases|Maciej| |
 |-| find out how degenerate cases were treated in Suzuki paper| | |
 |x| find and download raw S(s, q) data from Suzuki+16|RP| |
 |*| plot S(s, q), i.e., fig 6 from paper|Marcin| |
 |-| implement function calculating N\_exp| | |
+|-| test N\_exp calculation using S(s, q) and f(s, q) from S+16| | |
 
 Status (- nothing done, * in progress, x done)
 
