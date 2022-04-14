@@ -10,8 +10,9 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 |-| find out how degenerate cases were treated in Suzuki paper| | |
 |x| find and download raw S(s, q) data from Suzuki+16|RP| |
 |x| plot S(s, q), i.e., fig 6 from paper|Marcin| |
-|-| implement function calculating N\_exp| | |
+|*| implement function calculating N\_exp|Pawel| |
 |-| test N\_exp calculation using S(s, q) and f(s, q) from S+16| | |
+|x| add raw planet data (s,q) | Pawel | errors should be added next |
 
 Status (- nothing done, * in progress, x done)
 
