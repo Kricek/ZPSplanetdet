@@ -16,10 +16,11 @@ def fun_massratio(s, q, params):
     generating mass-ratio function in shape of f(s, q, params = [A,q_break,n,p,m]) = A*[(q/q_break)^n+(q/q_break)^p]*s^m 
     params = [A, q_break, n, p, m]
     """
+    A, q_break, n, p, m = params
     if q < params[1]:        
-        return params[0]*(q/params[1])**params[2]*s**params[4]
+        return A*(q/q_break)**n*s**m
     else:
-        return params[0]*(q/params[1])**params[3]*s**params[4]
+        return A*(q/q_break)**p*s**m
 
 def fun_sensitivity(s,q, data):
     """
