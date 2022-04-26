@@ -13,6 +13,7 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 |*| implement function calculating N\_exp|Pawel, Marcin| |
 |-| test N\_exp calculation using S(s, q) and f(s, q) from S+16| | |
 |x| add raw planet data (s,q) | Pawel | errors should be added next |
+|-| write code that repeats the analysis of Suzuki+16 (everything except N\_exp calculation) | | |
 
 Status (- nothing done, * in progress, x done)
 
