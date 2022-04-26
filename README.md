@@ -10,7 +10,7 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 |-| find out how degenerate cases were treated in Suzuki paper| | |
 |x| find and download raw S(s, q) data from Suzuki+16|RP| |
 |x| plot S(s, q), i.e., fig 6 from paper|Marcin| |
-|*| implement function calculating N\_exp|Pawel| |
+|*| implement function calculating N\_exp|Pawel, Marcin| |
 |-| test N\_exp calculation using S(s, q) and f(s, q) from S+16| | |
 |x| add raw planet data (s,q) | Pawel | errors should be added next |
 
@@ -20,4 +20,4 @@ Status (- nothing done, * in progress, x done)
 - nazwy zmiennych i funkcji są znaczące i określają po co jest dana zmienna/funkcja
 - nazwy funkcji zaczynają się od czasownika
 - pod komendą def jest docstring, który opisuje funkcję i ewentualnie wejście oraz wyjście
-
+- wcięcia robimy czterema spacjami, a nie tabulatorem
