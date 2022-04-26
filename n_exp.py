@@ -1,25 +1,76 @@
 import numpy as np
-import scipy.integrate as integrate
+import pandas as pd
+
+def get_lower_nearest_index(array, x): 
+    """
+    giving index of array element closest to x
+    """
+    idx = (np.abs(array - x)).argmin()
+    if array[idx] > x:
+        return idx - 1
+    else:
+        return idx
 
 def fun_massratio(s, q, params): 
     """
-    generating mass-ratio function in shape of f(s,q,A,n,m) = A*q^n*s^m 
-    params = [A, n, m]
+    generating mass-ratio function in shape of f(s, q, params = [A,q_break,n,p,m]) = A*[(q/q_break)^n+(q/q_break)^p]*s^m 
+    params = [A, q_break, n, p, m]
     """
-    return params[0]*q**params[1]*s**params[2]
+    if q < params[1]:        
+        return params[0]*(q/params[1])**params[2]*s**params[4]
+    else:
+        return params[0]*(q/params[1])**params[3]*s**params[4]
 
-def fun_sensitivity(s,q): #should be moved to read_survey_sensitivity file as function interpolating S(s,q)
-    return .2
+def fun_sensitivity(s,q, data):
+    """
+    interpolate survey sensitivity from data given as arrays (log_s, log_q, surv_sens) for given point (s,q)
+    """
+    log_s, log_q, surv_sens = data
+    s_low_idx = get_lower_nearest_index(log_s, np.log10(s))
+    q_low_idx = get_lower_nearest_index(log_q, np.log10(q))
 
-def fun_massratio_sensitivity(s, q, params): #function to integrate: f*S
-    return fun_massratio(s,q, params)*fun_sensitivity(s,q)
+    if s_low_idx == 0 or q_low_idx == 0 or s_low_idx == (len(log_s)-1) or q_low_idx == (len(log_q)-1):
+        interpolated_surv_sens = surv_sens[q_low_idx,s_low_idx]
+        return interpolated_surv_sens
+    
+    point_A = [log_q[q_low_idx], log_s[s_low_idx], surv_sens[q_low_idx, s_low_idx]]
+    point_B = [log_q[q_low_idx+1], log_s[s_low_idx], surv_sens[q_low_idx+1, s_low_idx]]
+    point_C = [log_q[q_low_idx], log_s[s_low_idx+1], surv_sens[q_low_idx, s_low_idx+1]]
+#    print(point_A)
+#    print(point_B)
+#    print(point_C)
+    vector_AB = np.array(point_B) - np.array(point_A)
+    vector_AC = np.array(point_C) - np.array(point_A)
+    vector_normal = np.cross(vector_AB, vector_AC)
+    plane_constant = np.dot(vector_normal, point_A)
+    interpolated_surv_sens = (-vector_normal[0]*np.log10(q)-vector_normal[1]*np.log10(s)+plane_constant)/vector_normal[2]
+#    print([np.log10(q), np.log10(s), interpolated_surv_sens])
+    return interpolated_surv_sens
 
-def get_N_exp(params): #integration with finite limits q in (0,1), s in (0,5)
-    return integrate.dblquad(fun_massratio_sensitivity, 0, 1, 0, 5, args=(params,))
+def get_N_exp(params, data): 
+    """
+    Trivial integral by summation through all data given of function f*S where f is mass-ration function, S is survey sensitivity given by data
+    params = [A, q_break, n, p, m]
+    data = [log_s, log_q, survey_sensitivity] 
+    """
+    integral = 0
+    log_s, log_q, surv_sens = data
+    for i in range(len(log_q)-1):
+        for j in range(len(log_s)-1):
+            dsdq = (log_s[i]-log_s[i+1])*(log_q[i]-log_q[i+1])
+            integral += dsdq*fun_massratio(10**log_s[i],10**log_q[i], params)*surv_sens[i,j]
+    return integral
 
-A = 1
-n = 2
-m = 2
-params = [A, n, m]
-N_exp, N_exp_error = get_N_exp(params)
+sensitivity_data = pd.read_csv('data/survey_sensitivity2.dat', header=None)
+data = sensitivity_data.to_numpy()
+log_s = data[0,2:]
+log_q = data[1:,1]
+surv_sens = data[1:,2:]
+A = 0.62
+q_break = 1.65e4
+n = -0.92
+p = 0.47
+m = 0.5
+params = [A, q_break, n, p, m]
+N_exp = get_N_exp(params,[log_s, log_q, surv_sens])
 print(N_exp)
