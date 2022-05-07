@@ -11,12 +11,12 @@ def get_lower_nearest_index(array, x):
     else:
         return idx
 
-def fun_massratio(s, q, params): 
+def fun_massratio(s, q, q_break, params): 
     """
     generating mass-ratio function in shape of f(s, q, params = [A,q_break,n,p,m]) = A*[(q/q_break)^n+(q/q_break)^p]*s^m 
     params = [A, q_break, n, p, m]
     """
-    A, q_break, n, p, m = params
+    A, n, p, m = params
     if q < params[1]:        
         return A*(q/q_break)**n*s**m
     else:
@@ -48,7 +48,7 @@ def fun_sensitivity(s,q, data):
 #    print([np.log10(q), np.log10(s), interpolated_surv_sens])
     return interpolated_surv_sens
 
-def get_N_exp(params, data): 
+def get_N_exp(params, q_break, data): 
     """
     Trivial integral by summation through all data given of function f*S where f is mass-ration function, S is survey sensitivity given by data
     params = [A, q_break, n, p, m]
@@ -59,7 +59,7 @@ def get_N_exp(params, data):
     for i in range(len(log_q)-1):
         for j in range(len(log_s)-1):
             dsdq = (log_s[i]-log_s[i+1])*(log_q[i]-log_q[i+1])
-            integral += dsdq*fun_massratio(10**log_s[i],10**log_q[i], params)*surv_sens[i,j]
+            integral += dsdq*fun_massratio(10**log_s[i],10**log_q[i], q_break, params)*surv_sens[i,j]
     return integral
 
 sensitivity_data = pd.read_csv('data/survey_sensitivity2.dat', header=None)
@@ -68,10 +68,10 @@ log_s = data[0,2:]
 log_q = data[1:,1]
 surv_sens = data[1:,2:]
 A = 0.62
-q_break = 1.65e4
+q_break = 1.7e-4
 n = -0.92
 p = 0.47
 m = 0.5
-params = [A, q_break, n, p, m]
-N_exp = get_N_exp(params,[log_s, log_q, surv_sens])
+params = [A, n, p, m]
+N_exp = get_N_exp(params, q_break, [log_s, log_q, surv_sens])
 print(N_exp)
