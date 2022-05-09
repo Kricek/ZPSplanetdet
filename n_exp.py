@@ -53,7 +53,7 @@ def get_N_exp(params, q_break, data, Aqr):
     Trivial integral by summation through all data given of function f*S where f is mass-ration function, S is survey sensitivity given by data
     params = [A, q_break, n, p, m]
     data = [log_s, log_q, survey_sensitivity]
-    Aqr = A constant in 
+    Aqr = A constant in mass ratio distribution
     """
     integral = 0
     log_s, log_q, surv_sens = data
