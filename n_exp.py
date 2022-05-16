@@ -59,8 +59,8 @@ def get_N_exp(params, q_break, data, Aqr):
     log_s, log_q, surv_sens = data
     for i in range(len(log_q)-1):
         for j in range(len(log_s)-1):
-            dsdq = (log_s[i+1]-log_s[i])*(log_q[i+1]-log_q[i])
-            integral += dsdq*fun_massratio(10**log_s[i],10**log_q[i], q_break, params)*surv_sens[i,j]
+            dsdq = (log_s[j+1]-log_s[j])*(log_q[i+1]-log_q[i])
+            integral += dsdq*fun_massratio(10**log_s[j],10**log_q[i], q_break, params)*surv_sens[i,j]
     return Aqr*integral
 
 sensitivity_data = pd.read_csv('data/survey_sensitivity2.dat', header=None)
