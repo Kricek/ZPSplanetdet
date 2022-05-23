@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 
-def fun_massratio(s, q, q_break, params):
+def get_massratio(s, q, q_break, params):
     """
-    generating mass-ratio function in shape of f(s, q, params = [A,q_break,n,p,m]) = A*[(q/q_break)^n+(q/q_break)^p]*s^m 
+    generating mass-ratio function in shape of f(s, q, params = [q_break,n,p,m]) = [(q/q_break)^n+(q/q_break)^p]*s^m 
     params = [q_break, n, p, m]
     """
     n, p, m = params
@@ -29,7 +29,7 @@ def get_N_exp(s, q, sensitivity, q_break, Aqr):
                 ds = (s[j]-s[j-1])
             else:
                 ds = (s[j]-s[j-1])/2 + (s[i+1]-s[i])/2
-            dV[i,j] = ds * dq * surv_sens[i,j] * fun_massratio(s[j], q[i], q_break, params)
+            dV[i,j] = ds * dq * surv_sens[i,j] * get_massratio(s[j], q[i], q_break, params)
     return Aqr*np.sum(dV)
     
     
