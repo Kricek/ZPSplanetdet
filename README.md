@@ -5,7 +5,7 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 
 | Status | Task | Person | Notes |
 |--------|------|--------|-------|
-|* | find out how degenerate cases were treated in Suzuki paper|Gabriela| |
+|x| find out how degenerate cases were treated in Suzuki paper|Gabriela| |
 |* | calculate N\_exp in simplest case analytically |Gabriela| |
 | | MAYBE: speed-up N\_exp calculations | | this task is useful, but not required |
 |* | write code that repeats the analysis of Suzuki+16 (everything except N\_exp calculation) | Pawel, Maciej | prepared likelihood and probality functions |
