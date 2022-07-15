@@ -1,0 +1,21 @@
+Section 5.1, p.15
+For events with multiple degenerate models that fit the data,
+we weight the different models with exp(-Δχ2 / 2), where Δχ2 is the
+χ2 difference between the model in question and the best-fit
+model. Mostly, these degenerate models are close and wide
+models, but we also use a similar procedure for our ambiguous
+planetary event OGLE-2011-BLG-0950/MOA-2011-BLG-336,
+as discussed in Section 3.3.
+
+Section 3.3, p. 9
+The probability that this ambiguous event is due to a
+planetary system rather than a stellar binary depends both on
+the χ2 values for the respective fits and the prior probabilities of
+lens systems with the parameters of the best-fit models. We
+define the relative fit probability of the stellar binary model to
+be exp(-Δχ2 / T), where T = 2 is the correct value if the observa-
+tional uncertainties follow an uncorrelated Gaussian distribution.
+When T = 2, this is equivalent to the likelihood
+ratio that is sometimes used for similar model comparisons
+(Bozza et al. 2016). We can adjust T in order to test the effects
+of non-Gaussian uncertainties.
