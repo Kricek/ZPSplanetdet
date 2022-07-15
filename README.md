@@ -5,7 +5,6 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 
 | Status | Task | Person | Notes |
 |--------|------|--------|-------|
-|x| find out how degenerate cases were treated in Suzuki paper|Gabriela| |
 |* | calculate N\_exp in simplest case analytically |Gabriela| |
 | | MAYBE: speed-up N\_exp calculations | | this task is useful, but not required |
 |* | write code that repeats the analysis of Suzuki+16 (everything except N\_exp calculation) | Pawel, Maciej | prepared likelihood and probality functions |
@@ -25,6 +24,7 @@ Status (- nothing done, * in progress, x done)
 |x| add raw planet data (s,q) | Pawel | errors should be added next |
 |x| implement function calculating N\_exp|Pawel, Marcin, Jakub| Pawel's solution implemented with target *f* function |
 |x| test N\_exp calculation using S(s, q) and f(s, q) from S+16| | |
+|x| find out how degenerate cases were treated in Suzuki paper|Gabriela| [degenerate\_cases.txt](degenerate_cases.txt) |
 
 
 
