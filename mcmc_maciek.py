@@ -77,9 +77,9 @@ sensitivity_data = [log_s, log_q, surv_sens]
 
 planet_data = pd.read_csv('data/planets_data.csv', header=None)
 planet_data = planet_data.to_numpy()
-s = planet_data[0:,2]
-q = planet_data[0:,1]
-q *= 10**3
+s = planet_data[1:,2].astype(float)
+q = planet_data[1:,1].astype(float)
+q *= 10**-3
 planet_data = [s, q]
 
 # calculating S
