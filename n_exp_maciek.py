@@ -32,18 +32,19 @@ def get_N_exp(params, q_break, data):
             integral += dsdq*get_massratio(params, q_break, 10**log_s[j],10**log_q[i])*surv_sens[i,j]
     return A * integral
 
-sensitivity_data = pd.read_csv('data/survey_sensitivity2.dat', header=None)
-data = sensitivity_data.to_numpy()
-log_s = data[0,2:]
-log_q = data[1:,1]
-surv_sens = data[1:,2:]
+if __name__ == '__main__':
+    sensitivity_data = pd.read_csv('data/survey_sensitivity2.dat', header=None)
+    data = sensitivity_data.to_numpy()
+    log_s = data[0,2:]
+    log_q = data[1:,1]
+    surv_sens = data[1:,2:]
 
-A = 0.62
-m = 0.5
-n = -0.92
-p = 0.47
-q_break = 1.7e-4
-params = [A, m, n, p]
+    A = 0.62
+    m = 0.5
+    n = -0.92
+    p = 0.47
+    q_break = 1.7e-4
+    params = [A, m, n, p]
 
-N_exp = get_N_exp(params, q_break, [log_s, log_q, surv_sens])
-print(N_exp)
+    N_exp = get_N_exp(params, q_break, [log_s, log_q, surv_sens])
+    print(N_exp)
