@@ -5,11 +5,13 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 
 | Status | Task | Person | Notes |
 |--------|------|--------|-------|
-|* | calculate N\_exp in simplest case analytically |Gabriela| |
+|\* | write code that repeats the analysis of Suzuki+16 | Pawel, Maciej, Jakub, Gabriela | |
+| | output results | | |
+| | extend Suzuki+16 analysis to better include degenerate solutions | | |
+| | extend Suzuki+16 analysis to include uncertainties of s and q for each planet | | | 
+| | prepare report | | |
 | | MAYBE: speed-up N\_exp calculations | | this task is useful, but not required |
-|* | write code that repeats the analysis of Suzuki+16 (everything except N\_exp calculation) | Pawel, Maciej | prepared likelihood and probality functions |
-\ | extend Suzuki+16 analysis to better include degenerate solutions | | |
-\ | extend Suzuki+16 analysis to include uncertainties of s and q for each planet | | | 
+| | MAYBE: combine common (the same or almost the same) functions from mcmc\_kuba.py and mcmc\_degen.py | | |
 
 Status (- nothing done, * in progress, x done)
 
@@ -25,6 +27,9 @@ Status (- nothing done, * in progress, x done)
 |x| implement function calculating N\_exp|Pawel, Marcin, Jakub| Pawel's solution implemented with target *f* function |
 |x| test N\_exp calculation using S(s, q) and f(s, q) from S+16| | |
 |x| find out how degenerate cases were treated in Suzuki paper|Gabriela| [degenerate\_cases.txt](degenerate_cases.txt) |
+|x| interpolation of S(s,q)|Jakub| |
+|\*| calculate N\_exp in simplest case analytically |Gabriela| no need to finish it|
+|x| calculate weights based on Dchi^2|Gabriela, Maciej| |
 
 
 
