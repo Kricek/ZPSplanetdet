@@ -23,16 +23,20 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data):
     log_L1, log_L2 = (0, 0)
     #nexp = get_N_exp(params, q_break, data)
     log_likelihood = -1 * get_N_exp(params, q_break, sensitivity_data) 
+    degen_data = []
     for i in range(len(q)):
         if(w[i] == 1):    
             log_L1 += np.log(A) + np.log(get_massratio(params, q_break, s[i], q[i])) + np.log(InterpolateSens(log_s, log_q, surv_sens, s[i], q[i], 4, 'cubic'))
         else:
-            L2a = A * get_massratio(params, q_break, s[i], q[i]) * InterpolateSens(log_s, log_q, surv_sens, s[i], q[i], 4, 'cubic') * w[i]
-            L2b = A * get_massratio(params, q_break, s[i+1], q[i+1]) * InterpolateSens(log_s, log_q, surv_sens, s[i+1], q[i+1], 4, 'cubic') * w[i+1]
-            log_L2 += np.log(L2a + L2b)
-            i += 2
-        if(i > 25):
-            break 
+            degen_data.append([s[i], q[i], w[i]])
+            
+    i = 0        
+    while i < len(degen_data):
+        L2a = A * get_massratio(params, q_break, degen_data[i][0], degen_data[i][1]) * InterpolateSens(log_s, log_q, surv_sens, degen_data[i][0], degen_data[i][1], 4, 'cubic') * degen_data[i][2]
+        L2b = A * get_massratio(params, q_break, degen_data[i+1][0], degen_data[i+1][1]) * InterpolateSens(log_s, log_q, surv_sens, degen_data[i+1][0], degen_data[i+1][1], 4, 'cubic') * degen_data[i+1][2]
+        log_L2 += np.log(L2a + L2b)
+        i += 2
+        
     log_likelihood += log_L1 + log_L2 
     return log_likelihood # + np.log(S)
 
