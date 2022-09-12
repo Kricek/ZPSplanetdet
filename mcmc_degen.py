@@ -22,21 +22,19 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data):
     A, m, n, p = params
     log_L1, log_L2 = (0, 0)
     #nexp = get_N_exp(params, q_break, data)
-    log_likelihood = -1 * get_N_exp(params, q_break, sensitivity_data) 
-    degen_data = []
-    for i in range(len(q)):
+    log_likelihood = -1 * get_N_exp(params, q_break, sensitivity_data)
+    i = 0
+    while i < len(q):        
         if(w[i] == 1):    
             log_L1 += np.log(A) + np.log(get_massratio(params, q_break, s[i], q[i])) + np.log(InterpolateSens(log_s, log_q, surv_sens, s[i], q[i], 4, 'cubic'))
+            i += 1
         else:
-            degen_data.append([s[i], q[i], w[i]])
-            
-    i = 0        
-    while i < len(degen_data):
-        L2a = A * get_massratio(params, q_break, degen_data[i][0], degen_data[i][1]) * InterpolateSens(log_s, log_q, surv_sens, degen_data[i][0], degen_data[i][1], 4, 'cubic') * degen_data[i][2]
-        L2b = A * get_massratio(params, q_break, degen_data[i+1][0], degen_data[i+1][1]) * InterpolateSens(log_s, log_q, surv_sens, degen_data[i+1][0], degen_data[i+1][1], 4, 'cubic') * degen_data[i+1][2]
-        log_L2 += np.log(L2a + L2b)
-        i += 2
-        
+            L2a = A * get_massratio(params, q_break, s[i], q[i]) * InterpolateSens(log_s, log_q, surv_sens, s[i], q[i], 4, 'cubic') * w[i]
+            L2b = A * get_massratio(params, q_break, s[i+1], q[i+1]) * InterpolateSens(log_s, log_q, surv_sens, s[i+1], q[i+1], 4, 'cubic') * w[i+1]
+            log_L2 += np.log(L2a + L2b)
+            i += 2
+        #if(i > 25):
+            #break 
     log_likelihood += log_L1 + log_L2 
     return log_likelihood # + np.log(S)
 
@@ -96,13 +94,15 @@ nwalkers, ndim = pos.shape
 # running emcee
 
 sampler = emcee.EnsembleSampler(nwalkers, ndim, get_log_probability, args = (q_break, sensitivity_data, planet_data))
-sampler.run_mcmc(pos, 10000, progress=True)
+pos_new = sampler.run_mcmc(pos, 400)
+sampler.reset()
+sampler.run_mcmc(pos_new, 600, progress=True)
 
 # visualization of results
 
 labels = ["A", "m", "n", "p"]
 flat_samples = sampler.get_chain(flat = True)
-figure = corner.corner(flat_samples, labels = labels)
+figure = corner.corner(flat_samples, labels=labels,
+                       quantiles=[0.16, 0.5, 0.84],
+                       show_titles=True, title_kwargs={"fontsize": 12})
 plt.show()
-Footer
-
