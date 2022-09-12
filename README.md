@@ -6,12 +6,12 @@ Repozytorium Zespołowego Projektu Studenckiego, realizowanego w ramach studiów
 | Status | Task | Person | Notes |
 |--------|------|--------|-------|
 |\* | write code that repeats the analysis of Suzuki+16 | Pawel, Maciej, Jakub, Gabriela | |
-| | output results | | |
 | | extend Suzuki+16 analysis to better include degenerate solutions | | |
 | | extend Suzuki+16 analysis to include uncertainties of s and q for each planet | | | 
 | | prepare report | | |
 | | MAYBE: speed-up N\_exp calculations | | this task is useful, but not required |
 | | MAYBE: combine common (the same or almost the same) functions from mcmc\_kuba.py and mcmc\_degen.py | | |
+| | MAYBE: print results to screen (similar to corner call)
 
 Status (- nothing done, * in progress, x done)
 
@@ -30,6 +30,9 @@ Status (- nothing done, * in progress, x done)
 |x| interpolation of S(s,q)|Jakub| |
 |\*| calculate N\_exp in simplest case analytically |Gabriela| no need to finish it|
 |x| calculate weights based on Dchi^2|Gabriela, Maciej| |
+|x| write code that repeats the analysis of Suzuki+16 | Pawel, Maciej, Jakub, Gabriela, Marcin | |
+|x| output results | Jakub | |
+
 
 
 
