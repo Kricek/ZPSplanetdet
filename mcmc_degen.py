@@ -1,19 +1,19 @@
 import numpy as np
-from n_exp_maciek import get_massratio, get_N_exp
-from surv_ip_kuba import InterpolateSens
 import emcee
 import pandas as pd
 import corner
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
+from n_exp_maciek import get_massratio, get_N_exp
+from surv_ip_kuba import InterpolateSens
+
 """
 step by step analysis as described in Suzuki+16
 pdf - probability density function
-modyfikowana wersja mcmc_maciek.py z githuba
 """
 
-def get_log_likelihood(params, q_break, sensitivity_data, planet_data):
+def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
     """
     pdf for the data given the parameters
     """
@@ -26,17 +26,15 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data):
     i = 0
     while i < len(q):        
         if(w[i] == 1):    
-            log_L1 += np.log(A) + np.log(get_massratio(params, q_break, s[i], q[i])) + np.log(InterpolateSens(log_s, log_q, surv_sens, s[i], q[i], 4, 'cubic'))
+            log_L1 += np.log(A) + np.log(get_massratio(params, q_break, s[i], q[i])) + np.log(S[i])
             i += 1
         else:
-            L2a = A * get_massratio(params, q_break, s[i], q[i]) * InterpolateSens(log_s, log_q, surv_sens, s[i], q[i], 4, 'cubic') * w[i]
-            L2b = A * get_massratio(params, q_break, s[i+1], q[i+1]) * InterpolateSens(log_s, log_q, surv_sens, s[i+1], q[i+1], 4, 'cubic') * w[i+1]
+            L2a = A * get_massratio(params, q_break, s[i], q[i]) * S[i] * w[i]
+            L2b = A * get_massratio(params, q_break, s[i+1], q[i+1]) * S[i+1] * w[i+1]
             log_L2 += np.log(L2a + L2b)
             i += 2
-        #if(i > 25):
-            #break 
     log_likelihood += log_L1 + log_L2 
-    return log_likelihood # + np.log(S)
+    return log_likelihood 
 
 def get_log_prior(params):
     """
@@ -47,7 +45,7 @@ def get_log_prior(params):
         return 0.0
     return -np.inf
 
-def get_log_probability(params, q_break, sensitivity_data, planet_data):
+def get_log_probability(params, q_break, sensitivity_data, planet_data, S):
     """
     posterior pdf for parameters given the data to be sampled
     """
@@ -56,7 +54,7 @@ def get_log_probability(params, q_break, sensitivity_data, planet_data):
     lp = get_log_prior(params)
     if not np.isfinite(lp):
         return -np.inf
-    return lp + get_log_likelihood(params, q_break, sensitivity_data, planet_data)
+    return lp + get_log_likelihood(params, q_break, sensitivity_data, planet_data, S)
 
 # values imported from Suzuki+16
 
@@ -86,6 +84,14 @@ w = planet_data[1:,3].astype(float)
 q *= 10**-3
 planet_data = [s, q, w]
 
+# calculating S for all (s_i, q_i)
+
+S = np.zeros(len(q))
+
+for i in range(len(q)):
+    S[i] = InterpolateSens(log_s, log_q, surv_sens, s[i], q[i], 4, 'cubic')
+    #print(S[i])
+
 # setting starting positions for walkers
 
 pos = np.random.rand(50, 4)
@@ -93,8 +99,8 @@ nwalkers, ndim = pos.shape
 
 # running emcee
 
-sampler = emcee.EnsembleSampler(nwalkers, ndim, get_log_probability, args = (q_break, sensitivity_data, planet_data))
-pos_new = sampler.run_mcmc(pos, 400)
+sampler = emcee.EnsembleSampler(nwalkers, ndim, get_log_probability, args = (q_break, sensitivity_data, planet_data, S))
+pos_new = sampler.run_mcmc(pos, 400, progress=True)
 sampler.reset()
 sampler.run_mcmc(pos_new, 600, progress=True)
 
