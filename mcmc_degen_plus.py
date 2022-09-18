@@ -1,3 +1,4 @@
+from cmath import nan
 import numpy as np
 import emcee
 import pandas as pd
@@ -28,8 +29,8 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
         if(w[i] == 1):    
             log_L1 += np.log(A) + np.log(get_massratio(model_params, q_break, s[i], q[i])) + np.log(S[i])
         i += 1
-    '''   
- if(x_4 > w[5]):
+       
+    if(x_4 > w[5]):
         log_L2 = np.log(A) + np.log(get_massratio(model_params, q_break, s[4], q[4])) + np.log(S[4])
     else:
         log_L2 = np.log(A) + np.log(get_massratio(model_params, q_break, s[5], q[5])) + np.log(S[5])
@@ -37,7 +38,7 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
     if(x_19 > w[20]):
         log_L3 = np.log(A) + np.log(get_massratio(model_params, q_break, s[19], q[19])) + np.log(S[19])
     else:
-        log_L3 = np.log(A) + np.log(get_massratio(model_params, q_break, s[20], q[20])) + np.log(S[20])
+        log_L3 = np.log(A) + np.log(get_massratio(model_params, q_break, s[20], q[20])) + np.log(S[20])    
     log_L0 += log_L3
     if(x_22 > w[22]):
         log_L4 = np.log(A) + np.log(get_massratio(model_params, q_break, s[22], q[22])) + np.log(S[22])
@@ -49,9 +50,10 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
     else:
         log_L5 = np.log(A) + np.log(get_massratio(model_params, q_break, s[25], q[25])) + np.log(S[25])
     log_L0 += log_L5
-    '''
-    log_likelihood = log_L1 + log_L0 
-    print(log_likelihood)
+
+    log_likelihood = log_L1 + log_L0
+
+    #print(log_likelihood)
 
     return log_likelihood 
 
@@ -60,7 +62,7 @@ def get_log_prior(params):
     uninformative prior pdf
     """
     A, m, n, p, x_4, x_19, x_22, x_24 = params 
-    if  A > 0 or x_4 < 0 or x_4 > 1 or x_19 < 0 or x_19 > 1 or x_22 < 0 or x_22 > 1 or x_24 < 0 or x_24 > 1:
+    if  A > 0 and not (x_4 <= 0 or x_4 >= 1) and not (x_19 <= 0 or x_19 >= 1) and not (x_22 <= 0 or x_22 >= 1) and not (x_24 <= 0 or x_24 >= 1):
         return 0.0
     return -np.inf
 
@@ -73,6 +75,10 @@ def get_log_probability(params, q_break, sensitivity_data, planet_data, S):
     lp = get_log_prior(params)
     if not np.isfinite(lp):
         return -np.inf
+
+    #log_likelihood = get_log_likelihood(params, q_break, sensitivity_data, planet_data, S)
+    #if np.isnan(log_likelihood):
+    #    print("A={}, S={}\n".format(params[0],S))
     return lp + get_log_likelihood(params, q_break, sensitivity_data, planet_data, S)
 
 # values imported from Suzuki+16
