@@ -22,12 +22,11 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
     s, q, w = planet_data
     A, m, n, p, x_4, x_19, x_22, x_24 = params
     model_params = (A, m, n, p)
-    log_L1, log_L0 = (0, 0)
-    log_likelihood = -1 * get_N_exp(model_params, q_break, sensitivity_data)
+    log_L0 = -1 * get_N_exp(model_params, q_break, sensitivity_data)
     i = 0
     while i < len(q):        
         if(w[i] == 1):    
-            log_L1 += np.log(A) + np.log(get_massratio(model_params, q_break, s[i], q[i])) + np.log(S[i])
+            log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[i], q[i])) + np.log(S[i])
         i += 1
        
     if(x_4 > w[5]):
@@ -50,12 +49,7 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
     else:
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[25], q[25])) + np.log(S[25])
 
-
-    log_likelihood = log_L1 + log_L0
-
-    #print(log_likelihood)
-
-    return log_likelihood 
+    return log_L0
 
 def get_log_prior(params):
     """
@@ -76,9 +70,6 @@ def get_log_probability(params, q_break, sensitivity_data, planet_data, S):
     if not np.isfinite(lp):
         return -np.inf
 
-    #log_likelihood = get_log_likelihood(params, q_break, sensitivity_data, planet_data, S)
-    #if np.isnan(log_likelihood):
-    #    print("A={}, S={}\n".format(params[0],S))
     return lp + get_log_likelihood(params, q_break, sensitivity_data, planet_data, S)
 
 # values imported from Suzuki+16
@@ -135,7 +126,7 @@ sampler.run_mcmc(pos_new, 600, progress=True)
 
 # visualization of results
 
-labels = ["A", "m", "n", "p"]
+labels = ["A", "m", "n", "p", "x_4", "x_19", "x_22", "x_24"]
 flat_samples = sampler.get_chain(flat = True)
 figure = corner.corner(flat_samples, labels=labels,
                        quantiles=[0.16, 0.5, 0.84],
