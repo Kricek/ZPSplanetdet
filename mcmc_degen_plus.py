@@ -31,25 +31,25 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
         i += 1
        
     if(x_4 > w[5]):
-        log_L2 = np.log(A) + np.log(get_massratio(model_params, q_break, s[4], q[4])) + np.log(S[4])
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[4], q[4])) + np.log(S[4])
     else:
-        log_L2 = np.log(A) + np.log(get_massratio(model_params, q_break, s[5], q[5])) + np.log(S[5])
-    log_L0 += log_L2
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[5], q[5])) + np.log(S[5])
+
     if(x_19 > w[20]):
-        log_L3 = np.log(A) + np.log(get_massratio(model_params, q_break, s[19], q[19])) + np.log(S[19])
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[19], q[19])) + np.log(S[19])
     else:
-        log_L3 = np.log(A) + np.log(get_massratio(model_params, q_break, s[20], q[20])) + np.log(S[20])    
-    log_L0 += log_L3
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[20], q[20])) + np.log(S[20])    
+
     if(x_22 > w[22]):
-        log_L4 = np.log(A) + np.log(get_massratio(model_params, q_break, s[22], q[22])) + np.log(S[22])
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[22], q[22])) + np.log(S[22])
     else:
-        log_L4 = np.log(A) + np.log(get_massratio(model_params, q_break, s[23], q[23])) + np.log(S[23])
-    log_L0 += log_L4
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[23], q[23])) + np.log(S[23])
+
     if(x_24 > w[24]):
-        log_L5 = np.log(A) + np.log(get_massratio(model_params, q_break, s[24], q[24])) + np.log(S[24])
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[24], q[24])) + np.log(S[24])
     else:
-        log_L5 = np.log(A) + np.log(get_massratio(model_params, q_break, s[25], q[25])) + np.log(S[25])
-    log_L0 += log_L5
+        log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[25], q[25])) + np.log(S[25])
+
 
     log_likelihood = log_L1 + log_L0
 
