@@ -62,7 +62,7 @@ def get_log_prior(params):
     uninformative prior pdf
     """
     A, m, n, p, x_4, x_19, x_22, x_24 = params 
-    if  A > 0 and not (x_4 <= 0 or x_4 >= 1) and not (x_19 <= 0 or x_19 >= 1) and not (x_22 <= 0 or x_22 >= 1) and not (x_24 <= 0 or x_24 >= 1):
+    if  A > 0 and x_4 > 0 and x_4 < 1 and x_19 > 0 and x_19 < 1 and x_22 > 0 and x_22 < 1 and x_24 > 0 and x_24 < 1:
         return 0.0
     return -np.inf
 
