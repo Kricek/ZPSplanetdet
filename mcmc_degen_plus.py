@@ -140,6 +140,7 @@ filtr1 = (x4_plot < w[5])
 filtr2 = (x19_plot < w[20])
 filtr3 = (x22_plot < w[22])
 filtr4 = (x24_plot < w[24])
+filtry = [filtr1, filtr2, filtr3, filtr4]
 
 x4_below = x4_plot[filtr1]
 x4_above = x4_plot[~filtr1]
@@ -155,15 +156,19 @@ x24_above = x24_plot[~filtr4]
 
 print("x4<", w[5], ": ", len(x4_below),"/",len(x4_plot), sep='')
 print("x4>", w[5], ": ", len(x4_above),"/",len(x4_plot), sep='')
+print("n(x4<w4)/n(x4>w4): ", len(x4_below)/len(x4_plot))
 
-print("x19<", w[20], ": ", len(x19_below),"/",len(x4_plot), sep='')
-print("x19>", w[20], ": ", len(x19_above),"/",len(x4_plot), sep='')
+print("x19<", w[20], ": ", len(x19_below),"/",len(x19_plot), sep='')
+print("x19>", w[20], ": ", len(x19_above),"/",len(x19_plot), sep='')
+print("n(x19<w19)/n(x19>w19): ", len(x19_below)/len(x19_plot))
 
 print("x22<", w[22], ": ", len(x22_below),"/",len(x22_plot), sep='')
 print("x22>", w[22], ": ", len(x22_above),"/",len(x22_plot), sep='')
+print("n(x22<w22)/n(x22>w22): ", len(x22_below)/len(x22_plot))
 
 print("x24<", w[24], ": ", len(x24_below),"/",len(x24_plot), sep='')
 print("x24>", w[24], ": ", len(x24_above),"/",len(x24_plot), sep='')
+print("n(x24<w4)/n(x24>w4): ", len(x24_below)/len(x24_plot))
 
 # visualization of the results
 
@@ -174,11 +179,25 @@ labels3 = ["x4_above"]
 results = np.array([A_plot, m_plot, n_plot, p_plot])#_below, x4_above])
 results = results.T
 
-figure = corner.corner(results, labels=labels1, quantiles=[0.16, 0.5, 0.84],              show_titles=True, title_kwargs={"fontsize": 12})
+figure = corner.corner(results, labels=labels1, quantiles=[0.16, 0.5, 0.84], show_titles=True, title_kwargs={"fontsize": 12})
+plt.savefig("cornerplots/nowe_podejscie.png", dpi=600)
+plt.clf()
 
-figure = corner.corner(x4_below.T, labels=labels2, color="blue", show_titles=True, title_kwargs={"fontsize": 12})#, fig = figure)
-                                   
-figure = corner.corner(x4_above.T, labels=labels3, color="red", show_titles=True, title_kwargs={"fontsize": 12})#, fig = figure2)
-                          
-plt.show()
+names = ["x_4", "x_19", "x_22", "x_24"]
+
+for i in range(4):
+    results_below = np.array([A_plot[filtry[i]], m_plot[filtry[i]], n_plot[filtry[i]], p_plot[filtry[i]]])
+    results_above = np.array([A_plot[~filtry[i]], m_plot[~filtry[i]], n_plot[~filtry[i]], p_plot[~filtry[i]]])
+
+    figure = corner.corner(results_below.T, quantiles=[0.16, 0.5, 0.84], labels=labels1, color="blue", label = "x4_below")                                   
+    figure = corner.corner(results_above.T, quantiles=[0.16, 0.5, 0.84], labels=labels1, color="red", label = "x4_above", fig=figure)
+
+    plt.savefig("cornerplots/" + names[i] + "/" + names[i] + "_above_below.png", dpi=600)                       
+    plt.clf()
+
+    figure = corner.corner(results_below.T, quantiles=[0.16, 0.5, 0.84], show_titles=True, labels=labels1, color="blue", label = "x4_below")
+    plt.savefig("cornerplots/" + names[i] + "/" + names[i] + "_below.png")                          
+    figure = corner.corner(results_above.T, quantiles=[0.16, 0.5, 0.84], show_titles=True, labels=labels1, color="red", label = "x4_above")
+    plt.savefig("cornerplots/" + names[i] + "/" + names[i] + "_above.png")
+
 

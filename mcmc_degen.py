@@ -111,4 +111,5 @@ flat_samples = sampler.get_chain(flat = True)
 figure = corner.corner(flat_samples, labels=labels,
                        quantiles=[0.16, 0.5, 0.84],
                        show_titles=True, title_kwargs={"fontsize": 12})
+plt.savefig("cornerplots/podejscie_suzukiego.png", dpi=600)
 plt.show()
