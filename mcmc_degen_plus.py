@@ -156,19 +156,19 @@ x24_above = x24_plot[~filtr4]
 
 #print("x4<", w[5], ": ", len(x4_below),"/",len(x4_plot), sep='')
 #print("x4>", w[5], ": ", len(x4_above),"/",len(x4_plot), sep='')
-print("n(x4<w4)/n: ", len(x4_below)/len(x4_plot))
+print("n(x4<w4)/n: ", np.sum(filtr1)/len(filtr1))
 
 #print("x19<", w[20], ": ", len(x19_below),"/",len(x19_plot), sep='')
 #print("x19>", w[20], ": ", len(x19_above),"/",len(x19_plot), sep='')
-print("n(x19<w19)/n: ", len(x19_below)/len(x19_plot))
+print("n(x19<w19)/n: ", np.sum(filtr2)/len(filtr2))
 
 #print("x22<", w[22], ": ", len(x22_below),"/",len(x22_plot), sep='')
 #print("x22>", w[22], ": ", len(x22_above),"/",len(x22_plot), sep='')
-print("n(x22<w22)/n: ", len(x22_below)/len(x22_plot))
+print("n(x22<w22)/n: ", np.sum(filtr3)/len(filtr3))
 
 #print("x24<", w[24], ": ", len(x24_below),"/",len(x24_plot), sep='')
 #print("x24>", w[24], ": ", len(x24_above),"/",len(x24_plot), sep='')
-print("n(x24<w4)/n: ", len(x24_below)/len(x24_plot))
+print("n(x24<w4)/n: ", np.sum(filtr4)/len(filtr4))
 
 # visualization of the results
 
