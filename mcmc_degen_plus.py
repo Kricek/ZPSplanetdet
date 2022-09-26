@@ -31,22 +31,22 @@ def get_log_likelihood(params, q_break, sensitivity_data, planet_data, S):
             log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[i], q[i])) + np.log(S[i])
         i += 1
        
-    if(x_4 > w[5]):
+    if(x_4 < w[4]):
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[4], q[4])) + np.log(S[4])
     else:
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[5], q[5])) + np.log(S[5])
 
-    if(x_19 > w[20]):
+    if(x_19 < w[19]):
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[19], q[19])) + np.log(S[19])
     else:
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[20], q[20])) + np.log(S[20])    
 
-    if(x_22 > w[22]):
+    if(x_22 < w[22]):
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[22], q[22])) + np.log(S[22])
     else:
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[23], q[23])) + np.log(S[23])
 
-    if(x_24 > w[24]):
+    if(x_24 < w[24]):
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[24], q[24])) + np.log(S[24])
     else:
         log_L0 += np.log(A) + np.log(get_massratio(model_params, q_break, s[25], q[25])) + np.log(S[25])
@@ -126,7 +126,7 @@ nwalkers, ndim = pos.shape
 sampler = emcee.EnsembleSampler(nwalkers, ndim, get_log_probability, args = (q_break, sensitivity_data, planet_data, S))
 pos_new = sampler.run_mcmc(pos, 400, progress=True)
 sampler.reset()
-sampler.run_mcmc(pos_new, 600, progress=True)
+sampler.run_mcmc(pos_new, 6000, progress=True)
 
 
 # obtaining the flat samples
@@ -154,21 +154,21 @@ x22_above = x22_plot[~filtr3]
 x24_below = x24_plot[filtr4]
 x24_above = x24_plot[~filtr4]
 
-print("x4<", w[5], ": ", len(x4_below),"/",len(x4_plot), sep='')
-print("x4>", w[5], ": ", len(x4_above),"/",len(x4_plot), sep='')
-print("n(x4<w4)/n(x4>w4): ", len(x4_below)/len(x4_plot))
+#print("x4<", w[5], ": ", len(x4_below),"/",len(x4_plot), sep='')
+#print("x4>", w[5], ": ", len(x4_above),"/",len(x4_plot), sep='')
+print("n(x4<w4)/n: ", len(x4_below)/len(x4_plot))
 
-print("x19<", w[20], ": ", len(x19_below),"/",len(x19_plot), sep='')
-print("x19>", w[20], ": ", len(x19_above),"/",len(x19_plot), sep='')
-print("n(x19<w19)/n(x19>w19): ", len(x19_below)/len(x19_plot))
+#print("x19<", w[20], ": ", len(x19_below),"/",len(x19_plot), sep='')
+#print("x19>", w[20], ": ", len(x19_above),"/",len(x19_plot), sep='')
+print("n(x19<w19)/n: ", len(x19_below)/len(x19_plot))
 
-print("x22<", w[22], ": ", len(x22_below),"/",len(x22_plot), sep='')
-print("x22>", w[22], ": ", len(x22_above),"/",len(x22_plot), sep='')
-print("n(x22<w22)/n(x22>w22): ", len(x22_below)/len(x22_plot))
+#print("x22<", w[22], ": ", len(x22_below),"/",len(x22_plot), sep='')
+#print("x22>", w[22], ": ", len(x22_above),"/",len(x22_plot), sep='')
+print("n(x22<w22)/n: ", len(x22_below)/len(x22_plot))
 
-print("x24<", w[24], ": ", len(x24_below),"/",len(x24_plot), sep='')
-print("x24>", w[24], ": ", len(x24_above),"/",len(x24_plot), sep='')
-print("n(x24<w4)/n(x24>w4): ", len(x24_below)/len(x24_plot))
+#print("x24<", w[24], ": ", len(x24_below),"/",len(x24_plot), sep='')
+#print("x24>", w[24], ": ", len(x24_above),"/",len(x24_plot), sep='')
+print("n(x24<w4)/n: ", len(x24_below)/len(x24_plot))
 
 # visualization of the results
 
@@ -179,18 +179,22 @@ labels3 = ["x4_above"]
 results = np.array([A_plot, m_plot, n_plot, p_plot])#_below, x4_above])
 results = results.T
 
-figure = corner.corner(results, labels=labels1, quantiles=[0.16, 0.5, 0.84], show_titles=True, title_kwargs={"fontsize": 12})
+figure = corner.corner(results, labels=labels1, quantiles=[0.16, 0.5, 0.84], bins=40, show_titles=True, title_kwargs={"fontsize": 12})
 plt.savefig("cornerplots/nowe_podejscie.png", dpi=600)
 plt.clf()
 
 names = ["x_4", "x_19", "x_22", "x_24"]
 
 for i in range(4):
+
+    sum1 = np.sum(filtry[i])
+    sum2 = np.sum(~filtry[i])
+
     results_below = np.array([A_plot[filtry[i]], m_plot[filtry[i]], n_plot[filtry[i]], p_plot[filtry[i]]])
     results_above = np.array([A_plot[~filtry[i]], m_plot[~filtry[i]], n_plot[~filtry[i]], p_plot[~filtry[i]]])
 
-    figure = corner.corner(results_below.T, quantiles=[0.16, 0.5, 0.84], labels=labels1, color="blue", label = "x4_below")                                   
-    figure = corner.corner(results_above.T, quantiles=[0.16, 0.5, 0.84], labels=labels1, color="red", label = "x4_above", fig=figure)
+    figure = corner.corner(results_below.T, quantiles=[0.16, 0.5, 0.84], labels=labels1, bins=40, color="blue", label = "x4_below")                                   
+    figure = corner.corner(results_above.T, quantiles=[0.16, 0.5, 0.84], labels=labels1, bins=40, color="red", label = "x4_above", weights=(sum1/sum2)*np.ones(sum2), fig=figure)
 
     plt.savefig("cornerplots/" + names[i] + "/" + names[i] + "_above_below.png", dpi=600)                       
     plt.clf()
