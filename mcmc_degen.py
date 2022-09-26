@@ -102,14 +102,14 @@ nwalkers, ndim = pos.shape
 sampler = emcee.EnsembleSampler(nwalkers, ndim, get_log_probability, args = (q_break, sensitivity_data, planet_data, S))
 pos_new = sampler.run_mcmc(pos, 400, progress=True)
 sampler.reset()
-sampler.run_mcmc(pos_new, 600, progress=True)
+sampler.run_mcmc(pos_new, 6000, progress=True)
 
 # visualization of results
 
 labels = ["A", "m", "n", "p"]
 flat_samples = sampler.get_chain(flat = True)
 figure = corner.corner(flat_samples, labels=labels,
-                       quantiles=[0.16, 0.5, 0.84],
+                       quantiles=[0.16, 0.5, 0.84], bins=40, 
                        show_titles=True, title_kwargs={"fontsize": 12})
 plt.savefig("cornerplots/podejscie_suzukiego.png", dpi=600)
 plt.show()
