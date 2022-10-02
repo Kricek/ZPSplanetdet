@@ -5,7 +5,7 @@ import pandas as pd
 import corner
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from datetime import date
+from datetime import datetime
 
 from n_exp_maciek import get_massratio, get_N_exp
 from surv_ip_kuba import InterpolateSens
@@ -139,11 +139,14 @@ A_plot, m_plot, n_plot, p_plot, x4_plot, x19_plot, x22_plot, x24_plot = flat_sam
 txt = ''
 for i in range(ndim):
     results = np.percentile(flat_samples[:, i], [16, 50, 84])
-    q = np.diff(results)
-    txt += ','+','.join([str(results[1]), str(-q[0]), str(q[1])])
+    if i < 4:
+        q = np.diff(results)
+        txt += ','+','.join([str(results[1]), str(-q[0]), str(q[1])])
+    else:
+        txt += ','+str(results[1])
 
 with open("./results/f_params.CSV", 'a', encoding="utf-8") as results_file:
-    today = date.today()
+    today = datetime.now()
     results_file.write('\n'+today.strftime("%d/%m/%Y %H:%M:%S")+",new (no deviation)" + txt)
 
 # printing the fraction of values above/below the limit
@@ -203,9 +206,9 @@ for i in range(4):
     plt.savefig("cornerplots/" + names[i] + "/" + names[i] + "_above_below.png", dpi=600)                       
     plt.clf()
 
-    figure = corner.corner(results_below.T, quantiles=[0.16, 0.5, 0.84], show_titles=True, labels=labels1, color="blue", label = "x4_below")
+    figure = corner.corner(results_below.T, quantiles=[0.16, 0.5, 0.84], show_titles=True, labels=labels1, label = "x4_below")
     plt.savefig("cornerplots/" + names[i] + "/" + names[i] + "_below.png")                          
-    figure = corner.corner(results_above.T, quantiles=[0.16, 0.5, 0.84], show_titles=True, labels=labels1, color="red", label = "x4_above")
+    figure = corner.corner(results_above.T, quantiles=[0.16, 0.5, 0.84], show_titles=True, labels=labels1, label = "x4_above")
     plt.savefig("cornerplots/" + names[i] + "/" + names[i] + "_above.png")
 
 
