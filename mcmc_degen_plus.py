@@ -5,6 +5,7 @@ import pandas as pd
 import corner
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from datetime import date
 
 from n_exp_maciek import get_massratio, get_N_exp
 from surv_ip_kuba import InterpolateSens
@@ -134,6 +135,17 @@ sampler.run_mcmc(pos_new, 6000, progress=True)
 flat_samples = sampler.get_chain(flat = True)
 A_plot, m_plot, n_plot, p_plot, x4_plot, x19_plot, x22_plot, x24_plot = flat_samples.T
 
+# writting results to file
+txt = ''
+for i in range(ndim):
+    results = np.percentile(flat_samples[:, i], [16, 50, 84])
+    q = np.diff(results)
+    txt += ','+','.join([str(results[1]), str(-q[0]), str(q[1])])
+
+with open("./results/f_params.CSV", 'a', encoding="utf-8") as results_file:
+    today = date.today()
+    results_file.write('\n'+today.strftime("%d/%m/%Y %H:%M:%S")+",new (no deviation)" + txt)
+
 # printing the fraction of values above/below the limit
 
 filtr1 = (x4_plot < w[5])
@@ -154,20 +166,12 @@ x22_above = x22_plot[~filtr3]
 x24_below = x24_plot[filtr4]
 x24_above = x24_plot[~filtr4]
 
-#print("x4<", w[5], ": ", len(x4_below),"/",len(x4_plot), sep='')
-#print("x4>", w[5], ": ", len(x4_above),"/",len(x4_plot), sep='')
 print("n(x4<w4)/n: ", np.sum(filtr1)/len(filtr1))
 
-#print("x19<", w[20], ": ", len(x19_below),"/",len(x19_plot), sep='')
-#print("x19>", w[20], ": ", len(x19_above),"/",len(x19_plot), sep='')
 print("n(x19<w19)/n: ", np.sum(filtr2)/len(filtr2))
 
-#print("x22<", w[22], ": ", len(x22_below),"/",len(x22_plot), sep='')
-#print("x22>", w[22], ": ", len(x22_above),"/",len(x22_plot), sep='')
 print("n(x22<w22)/n: ", np.sum(filtr3)/len(filtr3))
 
-#print("x24<", w[24], ": ", len(x24_below),"/",len(x24_plot), sep='')
-#print("x24>", w[24], ": ", len(x24_above),"/",len(x24_plot), sep='')
 print("n(x24<w4)/n: ", np.sum(filtr4)/len(filtr4))
 
 # visualization of the results

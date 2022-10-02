@@ -4,6 +4,7 @@ import pandas as pd
 import corner
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from datetime import date
 
 from n_exp_maciek import get_massratio, get_N_exp
 from surv_ip_kuba import InterpolateSens
@@ -104,10 +105,23 @@ pos_new = sampler.run_mcmc(pos, 400, progress=True)
 sampler.reset()
 sampler.run_mcmc(pos_new, 6000, progress=True)
 
+flat_samples = sampler.get_chain(flat = True)
+
+# writting results to file
+txt = ''
+for i in range(ndim):
+    results = np.percentile(flat_samples[:, i], [16, 50, 84])
+    q = np.diff(results)
+    txt += ','+','.join([str(results[1]), str(-q[0]), str(q[1])])
+
+with open("./results/f_params.CSV", 'a', encoding="utf-8") as results_file:
+    today = date.today()
+    results_file.write('\n'+today.strftime("%d/%m/%Y %H:%M:%S")+",Suzuki's" + txt)
+
 # visualization of results
 
 labels = ["A", "m", "n", "p"]
-flat_samples = sampler.get_chain(flat = True)
+
 figure = corner.corner(flat_samples, labels=labels,
                        quantiles=[0.16, 0.5, 0.84], bins=40, 
                        show_titles=True, title_kwargs={"fontsize": 12})
